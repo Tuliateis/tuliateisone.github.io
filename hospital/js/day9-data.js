@@ -122,7 +122,7 @@ const day9Data = {
        
         '102':[
             { type: '口服', medicine: 'A药' },
-            { type: '口服', medicine: '■药' }
+            { type: '注射', medicine: '■药' }
         ],
                 
         '202': { type: '注射', medicine: '镇静剂' }
@@ -201,4 +201,5 @@ const day9Data = {
             needsCleaning: false
         }
     }
+
 };
