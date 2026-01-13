@@ -170,14 +170,14 @@
     </div>
     
     <!-- 脚本加载 -->
-    <script src="js/day-common2.js"></script>
+    <script src="js/day-common1.js"></script>
 
 
     <script src="js/day14-data.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('day14Data:', day14Data);  // 调试：检查day14Data是否正确加载
-            const dayCommon = new DayCommon2(day14Data);
+            const dayCommon = new DayCommon1(day14Data);
             window.dayCommonInstance = dayCommon;  // 保存到全局，方便调试
             dayCommon.initDay(14);
         });
@@ -194,6 +194,7 @@
 </body>
 
 </html>
+
 
 
 
