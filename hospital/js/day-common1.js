@@ -1580,9 +1580,31 @@ showGameModal(title, content, options = {}) {
         }
         
         if (!allTreated) {
+            // 清除所有治疗记录
+            this.gameState.patientTreatments = {};
+            this.saveGameState();
+            // 重新加载所有病房页面，重置按钮状态
+            const rooms = ['101', '102', '201', '202'];
+            rooms.forEach(room => {
+                const submitBtn = document.getElementById(`submit-treatment-${room}`);
+                if (submitBtn) {
+                    submitBtn.textContent = '确认治疗';
+                    submitBtn.disabled = false;
+                    submitBtn.style.backgroundColor = '';
+                }
+            });
             const endDayData = this.dayData.endDayData || {};
-            const untreatMessage = endDayData.untreatMessage || `请先完成所有工作。<br>未完成：${untreatedRooms.join('、')}`;
-            this.showGameModal('提示', untreatMessage);
+            const untreatMessage = endDayData.untreatMessage || `请先完成所有病人的治疗。<br>未完成病房：${untreatedRooms.join('、')}`;
+            this.showGameModal('提示', untreatMessage,{
+                onClose: () => {
+                    // 关闭弹窗后刷新当前病房显示
+                    const activeRoomBtn = document.querySelector('#page-ward .sidebar-btn.active');
+                    if (activeRoomBtn) {
+                        const room = activeRoomBtn.getAttribute('data-room');
+                        this.loadWardContent(room);
+                    }
+                }
+            });
             return;
         }
         
@@ -1679,6 +1701,19 @@ showGameModal(title, content, options = {}) {
                 submitBtn.disabled = false;
                 submitBtn.style.backgroundColor = '';
             }
+            // 重新启用所有治疗选项
+            ['oral', 'injection', 'surgery', 'activity'].forEach(type => {
+                const yesCheckbox = document.getElementById(`${type}-yes-${room}`);
+                const noCheckbox = document.getElementById(`${type}-no-${room}`);
+                const displayDiv = document.getElementById(`${type}-display-${room}`);
+                
+                if (yesCheckbox) yesCheckbox.disabled = false;
+                if (noCheckbox) noCheckbox.disabled = false;
+                if (displayDiv) {
+                    displayDiv.style.opacity = '1';
+                    displayDiv.style.pointerEvents = 'all';
+                }
+            });
         });
         
         // 显示错误信息
